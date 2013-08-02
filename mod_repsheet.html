@@ -166,8 +166,29 @@ $ redis-cli keys "*"
 1) "127.0.0.1:requests"
 
 $ redis-cli lrange "127.0.0.1:requests" 0 -1
-1) "7/27/2013 20:37:54.854480, Wget/1.13.4 (linux-gnu), GET, /, -"
-                    </pre>
+1) "7/27/2013 20:37:54.854480, Wget/1.13.4 (linux-gnu), GET, /, -"</pre>
+
+		    <p>
+		      The package adds an initial configuration file
+		      at <strong><i>/etc/apache2/mods-available/repsheet.conf</i></strong>. Any
+		      configuration changes should be made in this
+		      file.
+		    </p>
+
+		    <pre>&lt;IfModule repsheet_module&gt;
+  RepsheetEnabled On
+  RepsheetRecorder On
+  RepsheetFilter On
+  RepsheetGeoIP Off
+  RepsheetProxyHeaders On
+  RepsheetAction Notify
+  RepsheetPrefix [repsheet]
+  RepsheetRedisTimeout 5
+  RepsheetRedisHost localhost
+  RepsheetRedisPort 6379
+  RepsheetRedisMaxLength 1000
+  RepsheetRedisExpiry 24
+&lt;/IfModule&gt;</pre>
                   </div>
                 </div>
 
@@ -256,7 +277,7 @@ $ redis-cli lrange "127.0.0.1:requests" 0 -1
 
 		    <p>
 		      The package adds an initial configuration file
-		      at <strong><i>/etc/httpd/conf.d/00_mod_repsheet_.conf</i></strong>. Any
+		      at <strong><i>/etc/httpd/conf.d/00_mod_repsheet.conf</i></strong>. Any
 		      configuration changes should be made in this
 		      file.
 		    </p>
@@ -272,78 +293,14 @@ $ redis-cli lrange "127.0.0.1:requests" 0 -1
   RepsheetRedisTimeout 5
   RepsheetRedisHost localhost
   RepsheetRedisPort 6379
-  RepsheetRedisMaxLength 2
+  RepsheetRedisMaxLength 1000
   RepsheetRedisExpiry 24
 &lt;/IfModule&gt;</pre>
                   </div>
                 </div>
 
                 <div class="tab-pane" id="tab-003">
-                  <p>
-                    This tutorial assumes that you are compiling
-                    ModRepsheet from source. This example
-                    uses <a href="https://www.archlinux.org">Arch
-                    Linux</a>. All of the compilation steps apply,
-                    however, you will have to adjust the package
-                    installation and apache setup based on your
-                    distribution.
-                  </p>
-
-                  <div id="installation">
-                    <h4>Installation</h4>
-                    <p>
-                      First, we need to install some dependencies:
-                    </p>
-
-                    <pre>$ sudo pacman -S ...</pre>
-
-                    <p>
-                      The redis-server dependency doesn't have to be
-                      installed on the system you run ModRepsheet on,
-                      but in this example we will just use one machine.
-                      Next, download the latest version of
-                      libapache2-mod-repsheet for you architecture. In
-                      this example we will use the 64-bit package. Use
-                      dpkg to install it.
-                    </p>
-
-                    <pre>$ wget https://github.com/repsheet/repsheet/archive/0.9.tar.gz
-$ tar xvzf 0.9.tar.gz
-$ ...
-$ ...
-		    </pre>
-
-                    <p>
-                      Finally, restart apache:
-                    </p>
-
-                    <pre>$ sudo systemctl restart httpd</pre>
-
-                    <p>
-                      To make sure everything loaded properly, take a
-                      look at the apache error log for the Repsheet
-                      initialization message
-                    </p>
-
-                    <pre>$ sudo tail -f /var/log/httpd/error.log
-[Sat Jul 27 15:30:00 2013] [notice] Repsheet Version 0.9 Enabled</pre>
-
-                    <p>
-                      You can verify that ModRepsheet is enabled and
-                      recording requests by using wget to fetch the
-                      apache default page and look at the resulting
-                      Redis modifications.
-                    </p>
-
-                    <pre>$ wget http://localhost
-
-$ redis-cli keys "*"
-1) "127.0.0.1:requests"
-
-$ redis-cli lrange "127.0.0.1:requests" 0 -1
-1) "7/27/2013 20:37:54.854480, Wget/1.13.4 (linux-gnu), GET, /, -"
-                    </pre>
-                  </div>
+		  <h2>Coming Soon</h4>
                 </div>
               </div>
             </div>
