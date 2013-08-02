@@ -33,8 +33,8 @@
     <link rel="stylesheet" href="assets/css/customizer.css">
 
     <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
   </head>
 
   <body>
@@ -71,7 +71,7 @@
             <div class="sixteen columns">
               <ul class="breadcrumb">
                 <li><a href="index.html">Home</a> <span class="divider">/</span></li>
-		<li class="active">ModRepsheet</li>
+                <li class="active">ModRepsheet</li>
               </ul>
             </div>
           </div>
@@ -81,83 +81,274 @@
 
       <!-- Main Content -->
       <section id="main-content">
-
         <div class="container">
+
           <!-- Page Header -->
           <div class="page-header">
             <h1>ModRepsheet <small>Setup and Installation</small></h1>
           </div>
           <!-- End Page Header -->
+
           <div class="row">
             <div class="sixteen columns">
-              <div class="underline-heading">
-                <h2>Debian/Ubuntu</h2>
-                <br /><br />
-                <p>
-                  This tutorial assumes that you are
-                  running <a href="http://www.debian.org/releases/stable/">Debian
-                    Wheezy</a>
-                  or <a href="http://releases.ubuntu.com/precise/">Ubuntu
-                    Precise Pangolin</a>. If you are running another
-                  version, this information may not be accurate.
-                </p>
+              <p>
+                This is designed to be a tutorial for setting up
+                ModRepsheet. To learn more about how ModRepsheet
+                works, you can
+                visit <a href="https://github.com/repsheet/repsheet/blob/master/README.md">The
+                  project's README page</a>
+              </p>
 
-                <div id="installation">
-                  <h4>Installation</h4>
-                  <br /><br />
+              <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-001" data-toggle="tab">Debian/Ubuntu</a></li>
+                <li><a href="#tab-002" data-toggle="tab">RedHat/Fedora/CentOS</a></li>
+                <li><a href="#tab-003" data-toggle="tab">From Source</a></li>
+              </ul>
+
+              <div class="tab-content">
+                <div class="tab-pane active" id="tab-001">
                   <p>
-                    First, we need to install some dependencies:
+                    This tutorial assumes that you are
+                    running <a href="http://www.debian.org/releases/stable/">Debian
+                      Wheezy</a>
+                    or <a href="http://releases.ubuntu.com/precise/">Ubuntu
+                      Precise Pangolin</a>. If you are running another
+                    version, this information may not be accurate.
                   </p>
 
-		  <pre>$ sudo apt-get install apache2 libhiredis0.10 libapr1 redis-server</pre>
+                  <div id="installation">
+                    <h4>Installation</h4>
+                    <p>
+                      First, we need to install some dependencies:
+                    </p>
 
-		  <p>
-		    The redis-server dependency doesn't have to be
-		    installed on the system you run ModRepsheet on,
-		    but in this example we will just use one machine.
-		    Next, download the latest version of
-		    libapache2-mod-repsheet for you architecture. In
-		    this example we will use the 64-bit package. Use
-		    dpkg to install it.
-                  </p>
+                    <pre>$ sudo apt-get install apache2 libhiredis0.10 libapr1 redis-server</pre>
 
-                  <pre>$ wget https://github.com/repsheet/repsheet/releases/download/0.9/libapache2-mod-repsheet_0.9-1_amd64.deb
+                    <p>
+                      The redis-server dependency doesn't have to be
+                      installed on the system you run ModRepsheet on,
+                      but in this example we will just use one machine.
+                      Next, download the latest version of
+                      libapache2-mod-repsheet for you architecture. In
+                      this example we will use the 64-bit package. Use
+                      dpkg to install it.
+                    </p>
+
+                    <pre>$ curl -L -O https://github.com/repsheet/repsheet/releases/download/0.9/libapache2-mod-repsheet_0.9-1_amd64.deb
 $ sudo dpkg -i libapache2-mod-repsheet_0.9-1_amd64.deb</pre>
 
-                  <p>
-                    Finally, enable the module and restart apache:
-                  </p>
+                    <p>
+                      Finally, enable the module and restart apache:
+                    </p>
 
-                  <pre>$ sudo a2enmod repsheet
+                    <pre>$ sudo a2enmod repsheet
 $ sudo /etc/init.d/apache restart</pre>
 
-                  <p>
-                    To make sure everything loaded properly, take a
-                    look at the apache error log for the Repsheet
-                    initialization message
-                  </p>
+                    <p>
+                      To make sure everything loaded properly, take a
+                      look at the apache error log for the Repsheet
+                      initialization message
+                    </p>
 
-                  <pre>$ sudo tail -f /var/log/apache2/error.log
+                    <pre>$ sudo tail -f /var/log/apache2/error.log
 [Sat Jul 27 15:30:00 2013] [notice] Repsheet Version 0.9 Enabled</pre>
 
-		  <p>
-		    You can verify that ModRepsheet is enabled and
-		    recording requests by using wget to fetch the
-		    apache default page and look at the resulting
-		    Redis modifications.
-		  </p>
+                    <p>
+                      You can verify that ModRepsheet is enabled and
+                      recording requests by using wget to fetch the
+                      apache default page and look at the resulting
+                      Redis modifications.
+                    </p>
 
-		  <pre>$ wget http://localhost
+                    <pre>$ wget http://localhost
+
+$ redis-cli keys "*"
+1) "127.0.0.1:requests"
+
+$ redis-cli lrange "127.0.0.1:requests" 0 -1
+1) "7/27/2013 20:37:54.854480, Wget/1.13.4 (linux-gnu), GET, /, -"
+                    </pre>
+                  </div>
+                </div>
+
+                <div class="tab-pane" id="tab-002">
+                  <p>
+                    This tutorial assumes that you are running an RPM
+                    based distribution such as <a href="http://www.redhat.com/">RedHat</a>, <a href="http://fedoraproject.org/">Fedora</a>, or
+                    <a href="http://www.centos.org/">CentOS</a>. This tutorial has only been tested on
+                    <a href="http://wiki.centos.org/Manuals/ReleaseNotes/CentOS6.4">CentOS
+                    6</a>. If you are running another version, this
+                    information may not be accurate.
+                  </p>
+
+                  <div id="installation">
+                    <h4>Installation</h4>
+                    <p>
+                      First, we need to install some dependencies. In order to get everything we need, we will first have to install <a href="http://fedoraproject.org/wiki/EPEL">EPEL</a>.
+                    </p>
+
+                    <pre>$ wget http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+$ sudo rpm -Uvh epel-release-6*.rpm
+$ sudo yum install httpd hiredis redis</pre>
+
+                    <p>
+                      The redis-server dependency doesn't have to be
+                      installed on the system you run ModRepsheet on,
+                      but in this example we will just use one machine.
+                      Next, download the latest version of
+                      libapache2-mod-repsheet for you architecture. In
+                      this example we will use the 64-bit package. Use
+                      dpkg to install it.
+                    </p>
+
+                    <pre>$ curl -L -O https://github.com/repsheet/repsheet/releases/download/0.9/mod_repsheet-0.9-1.x86_64.rpm
+$ sudo rpm -Uvh mod_repsheet-0.9-1.x86_64.rpm</pre>
+
+		    <p>
+		      Next you need to tell Apache to load
+		      ModRepsheet. Insert the following line at the
+		      end of the LoadModule section in <strong><i>/etc/httpd/conf/httpd.conf</i></strong>:
+		    </p>
+
+		    <pre>LoadModule repsheet_module modules/mod_repsheet.so</pre>
+
+		    <p>
+		      By default, SELinux does not allow Apache to
+		      make socket connections. If you don't enable
+		      this, you will get a permission denied error
+		      connecting to Redis and ModRepsheet will not
+		      function properly. You can see the
+		      details <a href="http://fedoraproject.org/wiki/SELinux/apache">here</a>
+		    </p>
+
+		    <pre>$ sudo /usr/sbin/setsebool httpd_can_network_connect=1</pre>
+		    
+                    <p>
+                      Finally, start Redis and Apache:
+                    </p>
+
+                    <pre>$ sudo /etc/init.d/redis start
+$ sudo /etc/init.d/httpd restart</pre>
+
+                    <p>
+                      To make sure everything loaded properly, take a
+                      look at the apache error log for the Repsheet
+                      initialization message
+                    </p>
+
+                    <pre>$ sudo tail -f /var/log/httpd/error.log
+[Sat Jul 27 15:30:00 2013] [notice] Repsheet Version 0.9 Enabled</pre>
+
+                    <p>
+                      You can verify that ModRepsheet is enabled and
+                      recording requests by using wget to fetch the
+                      apache default page and look at the resulting
+                      Redis modifications.
+                    </p>
+
+                    <pre>$ wget http://localhost
 
 $ redis-cli keys "*"
 1) "127.0.0.1:requests"
 
 $ redis-cli lrange "127.0.0.1:requests" 0 -1
 1) "7/27/2013 20:37:54.854480, Wget/1.13.4 (linux-gnu), GET, /, -"</pre>
+
+		    <p>
+		      The package adds an initial configuration file
+		      at <strong><i>/etc/httpd/conf.d/00_mod_repsheet_.conf</i></strong>. Any
+		      configuration changes should be made in this
+		      file.
+		    </p>
+
+		    <pre>&lt;IfModule repsheet_module&gt;
+  RepsheetEnabled On
+  RepsheetRecorder On
+  RepsheetFilter On
+  RepsheetGeoIP On
+  RepsheetProxyHeaders On
+  RepsheetAction Notify
+  RepsheetPrefix [repsheet]
+  RepsheetRedisTimeout 5
+  RepsheetRedisHost localhost
+  RepsheetRedisPort 6379
+  RepsheetRedisMaxLength 2
+  RepsheetRedisExpiry 24
+&lt;/IfModule&gt;</pre>
+                  </div>
+                </div>
+
+                <div class="tab-pane" id="tab-003">
+                  <p>
+                    This tutorial assumes that you are compiling
+                    ModRepsheet from source. This example
+                    uses <a href="https://www.archlinux.org">Arch
+                    Linux</a>. All of the compilation steps apply,
+                    however, you will have to adjust the package
+                    installation and apache setup based on your
+                    distribution.
+                  </p>
+
+                  <div id="installation">
+                    <h4>Installation</h4>
+                    <p>
+                      First, we need to install some dependencies:
+                    </p>
+
+                    <pre>$ sudo pacman -S ...</pre>
+
+                    <p>
+                      The redis-server dependency doesn't have to be
+                      installed on the system you run ModRepsheet on,
+                      but in this example we will just use one machine.
+                      Next, download the latest version of
+                      libapache2-mod-repsheet for you architecture. In
+                      this example we will use the 64-bit package. Use
+                      dpkg to install it.
+                    </p>
+
+                    <pre>$ wget https://github.com/repsheet/repsheet/archive/0.9.tar.gz
+$ tar xvzf 0.9.tar.gz
+$ ...
+$ ...
+		    </pre>
+
+                    <p>
+                      Finally, restart apache:
+                    </p>
+
+                    <pre>$ sudo systemctl restart httpd</pre>
+
+                    <p>
+                      To make sure everything loaded properly, take a
+                      look at the apache error log for the Repsheet
+                      initialization message
+                    </p>
+
+                    <pre>$ sudo tail -f /var/log/httpd/error.log
+[Sat Jul 27 15:30:00 2013] [notice] Repsheet Version 0.9 Enabled</pre>
+
+                    <p>
+                      You can verify that ModRepsheet is enabled and
+                      recording requests by using wget to fetch the
+                      apache default page and look at the resulting
+                      Redis modifications.
+                    </p>
+
+                    <pre>$ wget http://localhost
+
+$ redis-cli keys "*"
+1) "127.0.0.1:requests"
+
+$ redis-cli lrange "127.0.0.1:requests" 0 -1
+1) "7/27/2013 20:37:54.854480, Wget/1.13.4 (linux-gnu), GET, /, -"
+                    </pre>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
       </section>
 
       <!-- Footer -->
@@ -197,6 +388,8 @@ $ redis-cli lrange "127.0.0.1:requests" 0 -1
         <!-- END Bottom Footer -->
       </footer>
       <!-- END Footer -->
-      </div>
+    </div>
+    <script src="assets/js/jquery-1.9.1.min.js"></script>
+    <script src="assets/js/joiee.plugins.js"></script>
   </body>
 </html>
