@@ -300,7 +300,100 @@ $ redis-cli lrange "127.0.0.1:requests" 0 -1
                 </div>
 
                 <div class="tab-pane" id="tab-003">
-		  <h2>Coming Soon</h4>
+                  <p>
+                    This tutorial assumes that you are running
+                    an <a href="http://www.archlinux.org/">Arch
+                    Linux</a>. Any Linux or Unix distribution with the
+                    proper libraries and compiler should be able to
+                    build ModRepsheet from source. If you are running
+                    an RPM or Debian package based system, you should
+                    follow those instructions, as the installation
+                    will be much easier. You will have to adjust these
+                    instructions for the package manager and library
+                    choices of your distribution.
+                  </p>
+
+                  <div id="installation">
+                    <h4>Installation</h4>
+                    <p>
+                      First, we need to install some dependencies:
+                    </p>
+
+                    <pre>$ sudo pacman -S apache check redis git
+$ git clone git://github.com/redis/hiredis
+$ cd hiredis
+$ make
+$ sudo make install PREFIX=/usr</pre>
+
+                    <p>
+                      The redis dependency doesn't have to be
+                      installed on the system you run ModRepsheet on,
+                      but in this example we will just use one machine.
+                      Next, download the latest version of
+                      ModRepsheet.
+                    </p>
+
+                    <pre>$ curl -L -O https://github.com/repsheet/repsheet/archive/0.9/0.9.tar.gz
+$ tar xvzf 0.9.tar.gz
+$ cd backend-0.9
+$ ./autogen.sh
+$ make
+$ sudo make install</pre>
+
+		    <p>
+		      In order to enable ModRepsheet and activate its
+		      features, we need to add the configuration
+		      to <strong><i>/etc/httpd/conf/httpd.conf</i></strong>. Put
+		      the following in the configuration file anywhere
+		      after the LoadModule section
+		    </p>
+
+		    <pre>&lt;IfModule repsheet_module&gt;
+  RepsheetEnabled On
+  RepsheetRecorder On
+  RepsheetFilter On
+  RepsheetGeoIP On
+  RepsheetProxyHeaders On
+  RepsheetAction Notify
+  RepsheetPrefix [repsheet]
+  RepsheetRedisTimeout 5
+  RepsheetRedisHost localhost
+  RepsheetRedisPort 6379
+  RepsheetRedisMaxLength 1000
+  RepsheetRedisExpiry 24
+&lt;/IfModule&gt;</pre>
+
+                    <p>
+                      Finally, start Redis and Apache:
+                    </p>
+
+                    <pre>$ sudo systemctl restart redis
+$ sudo systemctl restart httpd</pre>
+
+                    <p>
+                      To make sure everything loaded properly, take a
+                      look at the apache error log for the Repsheet
+                      initialization message
+                    </p>
+
+                    <pre>$ sudo tail -f /var/log/httpd/error_log
+[Sat Jul 27 15:30:00 2013] [notice] Repsheet Version 0.9 Enabled</pre>
+
+                    <p>
+                      You can verify that ModRepsheet is enabled and
+                      recording requests by using wget to fetch the
+                      apache default page and look at the resulting
+                      Redis modifications.
+                    </p>
+
+                    <pre>$ curl 127.0.0.1
+
+$ redis-cli keys "*"
+1) "127.0.0.1:requests"
+
+$ redis-cli lrange "127.0.0.1:requests" 0 -1
+1) "7/27/2013 20:37:54.854480, curl/7.31.0, GET, /, -"</pre>
+                  </div>
                 </div>
               </div>
             </div>
