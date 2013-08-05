@@ -103,6 +103,7 @@
                 <li class="active"><a href="#tab-001" data-toggle="tab">Debian/Ubuntu</a></li>
                 <li><a href="#tab-002" data-toggle="tab">RedHat/Fedora/CentOS</a></li>
                 <li><a href="#tab-003" data-toggle="tab">From Source</a></li>
+		<li><a href="#tab-004" data-toggle="tab">ModSecurity</a></li>
               </ul>
 
               <div class="tab-content">
@@ -116,7 +117,7 @@
                     version, this information may not be accurate.
                   </p>
 
-                  <div id="installation">
+                  <div id="debian-installation">
                     <h4>Installation</h4>
                     <p>
                       First, we need to install some dependencies:
@@ -202,7 +203,7 @@ $ redis-cli lrange "127.0.0.1:requests" 0 -1
                     information may not be accurate.
                   </p>
 
-                  <div id="installation">
+                  <div id="redhat-installation">
                     <h4>Installation</h4>
                     <p>
                       First, we need to install some dependencies. In order to get everything we need, we will first have to install <a href="http://fedoraproject.org/wiki/EPEL">EPEL</a>.
@@ -313,7 +314,7 @@ $ redis-cli lrange "127.0.0.1:requests" 0 -1
                     choices of your distribution.
                   </p>
 
-                  <div id="installation">
+                  <div id="source-installation">
                     <h4>Installation</h4>
                     <p>
                       First, we need to install some dependencies:
@@ -395,7 +396,74 @@ $ redis-cli keys "*"
 $ redis-cli lrange "127.0.0.1:requests" 0 -1
 1) "7/27/2013 20:37:54.854480, curl/7.31.0, GET, /, -"</pre>
                   </div>
-                </div>
+		</div>
+
+		<div class="tab-pane" id="tab-004">
+		  <p>
+		    Repsheet seamlessly integrates with
+		    <a href="modsecurity.org">ModSecurity</a>. This
+		    means that any activity that triggers a
+		    ModSecurity alert will be detected by
+		    Repsheet. Repsheet will keep track of each
+		    offense as well as how many total times an actor
+		    has triggered each individual ModSecurity
+		    rule. This activity can then be viewed in
+		    the <a href="#">Repsheet Visualizer</a>.
+		  </p>
+		  
+		  <p>
+		    To get started, you will need to have
+		    ModSecurity version 2.7 installed. Any version
+		    of 2.7 should work properly. Keep in mind that
+		    versions below 2.7 will probably work, but have
+		    not been tested in production. Along with
+		    ModSecurity you also need to install
+		    the <a href="#">ModSecurity Core Rule
+		      Set</a>. These rules provide a nice set of
+		    triggers to help you protect your website. They
+		    also contain the mechanism that enables
+		    ModRepsheet to work.
+		  </p>
+		  
+		  <p>
+		    You can use any subset of the ModSecurity Core
+		    Rule Set. In order for Repsheet to work however,
+		    you must install
+		    the <strong><i>modsecurity_crs_49_header_tagging.conf</i></strong>
+		    rules from the optional rule set. These rules
+		    add headers to the request that ModRepsheet
+		    reads in order to find out what ModSecurity has
+		    picked up. As long as you have these rules
+		    installed, ModRepsheet will do the
+		    rest. ModSecurity configuration can be quite
+		    cumbersome and at times yield a high rate of
+		    false positives, so tuning is likely required.
+		  </p>
+		  
+		  <p>
+		    In order to ensure that ModRepsheet can
+		    successfully read from ModSecurity, we can issue
+		    a request to the webserver that triggers
+		    ModSecurity. We can then look at the Redis
+		    database to ensure that the activity was
+		    properly recorded.
+		  </p>
+
+		  <pre>$ curl http://127.0.0.1/?../../
+$ redis-cli keys "*"
+1) "127.0.0.1:repsheet"
+2) "127.0.0.1:requests"
+3) "127.0.0.1:detected"
+
+$ redis-cli zrange "127.0.0.1:detected" 0 -1
+1) "950103"
+
+$ redis-cli zscore "127.0.0.1:detected" 950103
+"1"
+
+$ redis-cli get "127.0.0.1:repsheet"
+"true"</pre>
+		</div>
               </div>
             </div>
           </div>
