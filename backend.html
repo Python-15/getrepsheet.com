@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--><html lang="en"><!--<![endif]-->
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Repsheet - Backend</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Repsheet">
+    <meta name="author" content="Aaron Bedra">
+
+    <!-- CSS Framework (Normalize + Skeleton) -->
+    <link href="assets/css/framework.css" rel="stylesheet">
+
+    <!-- Core CSS -->
+    <link href="assets/css/typography.css" rel="stylesheet">
+    <link href="assets/css/main.css" rel="stylesheet">
+    <link href="assets/css/widgets.css" rel="stylesheet">
+    <link href="assets/css/icons.css" rel="stylesheet">
+
+    <!-- Theme Colors CSS -->
+    <link href="assets/css/colors.css" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700" rel="stylesheet">
+    <link href="assets/css/fonts/glyphicons/style.css" rel="stylesheet">
+
+    <!-- External Plugin CSS -->
+    <link rel="stylesheet" href="assets/css/customizer.css">
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div id="main-wrapper" class="wide">
+      <!-- Main Header -->
+      <header id="main-header">
+        <!-- Top Header -->
+        <div id="header-top">
+          <div class="container">
+            <div class="sixteen columns">
+              <!-- Logo Container -->
+              <div id="logo-container">
+                <div id="logo-center">
+                  <a href="index.html"><h1>Repsheet</h1></a>
+                </div>
+              </div>
+              <!-- END Logo Container -->
+              <div class="tagline">Reputational Intelligence Engine</div>
+              <!-- Main Navigation -->
+              <nav id="main-nav">
+                <ul>
+                  <li><a href="index.html">Home</a></li>
+                  <li><a href="downloads.html">Downloads</a></li>
+                </ul>
+              </nav>
+              <!-- END Main Navigation -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Header -->
+        <div id="header-bottom">
+          <div class="container">
+            <div class="sixteen columns">
+              <ul class="breadcrumb">
+                <li><a href="index.html">Home</a> <span class="divider">/</span></li>
+                <li class="active">Repsheet Backend</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- END Main Header -->
+
+      <!-- Main Content -->
+      <section id="main-content">
+        <div class="container">
+
+          <!-- Page Header -->
+          <div class="page-header">
+            <h1>Repsheet Backend <small>Setup and Installation</small></h1>
+          </div>
+          <!-- End Page Header -->
+
+          <div class="row">
+            <div class="sixteen columns">
+              <p>
+                This is designed to be a tutorial for setting up the
+                Repsheet Backend. To learn more about how the Repsheet
+                Backend works, you can visit
+		<a href="https://github.com/repsheet/repsheet/blob/master/README.md">The
+                project's README page</a>
+              </p>
+
+              <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-001" data-toggle="tab">Debian/Ubuntu</a></li>
+                <li><a href="#tab-002" data-toggle="tab">RedHat/Fedora/CentOS</a></li>
+                <li><a href="#tab-003" data-toggle="tab">From Source</a></li>
+              </ul>
+
+              <div class="tab-content">
+                <div class="tab-pane active" id="tab-001">
+                  <p>
+                    This tutorial assumes that you are
+                    running <a href="http://www.debian.org/releases/stable/">Debian Wheezy</a>
+                    or <a href="http://releases.ubuntu.com/precise/">Ubuntu Precise Pangolin</a>.
+		    If you are running another version, this information may not be accurate.
+                  </p>
+
+                  <div id="debian-installation">
+                    <h4>Installation</h4>
+                    <p>
+                      First, we need to install some dependencies:
+                    </p>
+
+                    <pre>$ sudo apt-get install libhiredis0.10 redis-server libjson0 libcurl3</pre>
+
+                    <p>
+                      The redis-server dependency doesn't have to be
+                      installed on the system you run the Repsheet
+                      Backend on, but in this example we will just use
+                      one machine. Note that the Redis instance that
+                      you connect the Repsheet Backend to has to be
+                      the same Redis instance that ModRepsheet is
+                      recording to. Next, download the latest version
+                      of repsheet-backend for you architecture. In
+                      this example we will use the 64-bit package. Use
+                      dpkg to install it.
+                    </p>
+
+                    <pre>$ curl -L -O https://github.com/repsheet/backend/releases/download/0.12/repsheet-backend_0.12-1_amd64.deb
+$ sudo dpkg -i repsheet-backend_0.12-1_amd64.deb</pre>
+
+                    <p>
+		      Once installed, you can give it a try
+                    </p>
+
+		    <pre>$ repsheet -v
+Repsheet Backend Version 0.12
+usage: repsheet [-h] [-p] [-t] [-sbru]
+  -h <redis host>
+  -p <redis port>
+  -t <blacklist threshold>
+  -s (score actors)
+  -r (report top 10 offenders)
+  -b (blacklist offenders)
+  -u (publish blacklist upstream to Cloudflare)</pre>
+
+		    <p>
+		      In order to use the Repsheet Backend
+		      effectively, you should schedule it to run
+		      periodically and automatically blacklist repeat
+		      offenders. Most installations use once per
+		      minute as their schedule.
+		    </p>
+
+		    <pre>* * * * * /usr/bin/repsheet -b -t 50</pre>
+
+		    <p>
+		      This example sets the Repsheet Backend
+		      to run every minute and blacklist any offenders
+		      that have triggered 50 or more ModSecurity
+		      rules.
+		    </p>
+                  </div>
+                </div>
+
+                <div class="tab-pane" id="tab-002">
+                  <p>
+                    This tutorial assumes that you are running an RPM
+                    based distribution such as <a href="http://www.redhat.com/">RedHat</a>, <a href="http://fedoraproject.org/">Fedora</a>, or
+                    <a href="http://www.centos.org/">CentOS</a>. This tutorial has only been tested on
+                    <a href="http://wiki.centos.org/Manuals/ReleaseNotes/CentOS6.4">CentOS
+                    6</a>. If you are running another version, this
+                    information may not be accurate.
+                  </p>
+
+                  <div id="redhat-installation">
+                    <h4>Installation</h4>
+
+                    <p>
+                      First, we need to install some dependencies:
+                    </p>
+
+                    <pre>$ wget http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+$ sudo rpm -Uvh epel-release-6*.rpm
+$ sudo yum install hiredis redis</pre>
+
+                    <p>
+                      The redis-server dependency doesn't have to be
+                      installed on the system you run the Repsheet
+                      Backend on, but in this example we will just use
+                      one machine. Note that the Redis instance that
+                      you connect the Repsheet Backend to has to be
+                      the same Redis instance that ModRepsheet is
+                      recording to. Next, download the latest version
+                      of repsheet-backend for you architecture. In
+                      this example we will use the 64-bit package. Use
+                      dpkg to install it.
+                    </p>
+
+                    <pre>$ curl -L -O https://github.com/repsheet/backend/releases/download/0.12/repsheet_backend-0.12-1.x86_64.rpm
+$ sudo rpm -Uvh repsheet_backend-0.12-1.x86_64.rpm</pre>
+
+                    <p>
+		      Once installed, you can give it a try:
+                    </p>
+
+		    <pre>$ repsheet -v
+Repsheet Backend Version 0.12
+usage: repsheet [-h] [-p] [-t] [-sbru]
+  -h <redis host>
+  -p <redis port>
+  -t <blacklist threshold>
+  -s (score actors)
+  -r (report top 10 offenders)
+  -b (blacklist offenders)
+  -u (publish blacklist upstream to Cloudflare)</pre>
+
+		    <p>
+		      In order to use the Repsheet Backend
+		      effectively, you should schedule it to run
+		      periodically and automatically blacklist repeat
+		      offenders. Most installations use once per
+		      minute as their schedule.
+		    </p>
+
+		    <pre>* * * * * /usr/bin/repsheet -b -t 50</pre>
+
+		    <p>
+		      This example sets the Repsheet Backend
+		      to run every minute and blacklist any offenders
+		      that have triggered 50 or more ModSecurity
+		      rules.
+		    </p>
+                  </div>
+                </div>
+
+                <div class="tab-pane" id="tab-003">
+                  <p>
+                    This tutorial assumes that you are running
+                    an <a href="http://www.archlinux.org/">Arch
+                    Linux</a>. Any Linux or Unix distribution with the
+                    proper libraries and compiler should be able to
+                    build ModRepsheet from source. If you are running
+                    an RPM or Debian package based system, you should
+                    follow those instructions, as the installation
+                    will be much easier. You will have to adjust these
+                    instructions for the package manager and library
+                    choices of your distribution.
+                  </p>
+
+                  <div id="source-installation">
+                    <h4>Installation</h4>
+
+                    <p>
+                      First, we need to install some dependencies:
+                    </p>
+
+                    <pre>$ sudo pacman -S check redis git
+$ git clone git://github.com/redis/hiredis
+$ cd hiredis
+$ make
+$ sudo make install PREFIX=/usr</pre>
+
+                    <p>
+                      The redis-server dependency doesn't have to be
+                      installed on the system you run the Repsheet
+                      Backend on, but in this example we will just use
+                      one machine. Note that the Redis instance that
+                      you connect the Repsheet Backend to has to be
+                      the same Redis instance that ModRepsheet is
+                      recording to. Next, download the latest version
+                      of repsheet-backend for you architecture. In
+                      this example we will use the 64-bit package. Use
+                      dpkg to install it.
+                    </p>
+
+                    <pre>$ curl -L -O https://github.com/repsheet/backend/archive/0.12.tar.gz
+$ tar xvzf 0.12.tar.gz
+$ cd backend-0.12
+$ ./autogen.sh
+$ ./configure
+$ make
+$ make check
+$ sudo make install</pre>
+
+                    <p>
+		      Once installed, you can give it a try
+                    </p>
+
+		    <pre>$ repsheet -v
+Repsheet Backend Version 0.12
+usage: repsheet [-h] [-p] [-t] [-sbru]
+  -h <redis host>
+  -p <redis port>
+  -t <blacklist threshold>
+  -s (score actors)
+  -r (report top 10 offenders)
+  -b (blacklist offenders)
+  -u (publish blacklist upstream to Cloudflare)</pre>
+
+		    <p>
+		      In order to use the Repsheet Backend
+		      effectively, you should schedule it to run
+		      periodically and automatically blacklist repeat
+		      offenders. Most installations use once per
+		      minute as their schedule.
+		    </p>
+
+		    <pre>* * * * * /usr/bin/repsheet -b -t 50</pre>
+
+		    <p>
+		      This example sets the Repsheet Backend
+		      to run every minute and blacklist any offenders
+		      that have triggered 50 or more ModSecurity
+		      rules.
+		    </p>
+		  </div>
+		</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer id="footer">
+        <!-- Top Footer -->
+        <div id="footer-top">
+          <div class="container">
+            <div class="one-third column">
+              <h3>About</h3>
+              <p>
+                Repsheet was designed and implemented
+                by <a href="https://github.com/abedra">Aaron
+                  Bedra</a>. The development efforts have been made
+                possible in part
+                by <a href="https://braintreepayments.com">Braintree
+                  Payments</a>.
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- END Top Footer -->
+
+        <!-- Bottom Footer -->
+        <div id="footer-bottom">
+          <div class="container">
+            <div class="eight columns">
+              Copyright &copy; Aaron Bedra 2013. All Rights Reserved.
+            </div>
+            <div class="eight columns">
+              <ul class="footer-nav">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="downloads.html">Downloads</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- END Bottom Footer -->
+      </footer>
+      <!-- END Footer -->
+    </div>
+    <script src="assets/js/jquery-1.9.1.min.js"></script>
+    <script src="assets/js/joiee.plugins.js"></script>
+  </body>
+</html>
