@@ -95,7 +95,7 @@
                 This is designed to be a tutorial for setting up the
                 Repsheet Backend. To learn more about how the Repsheet
                 Backend works, you can visit
-		<a href="https://github.com/repsheet/repsheet/blob/master/README.md">The
+		<a href="https://github.com/repsheet/backend/blob/master/README.md">The
                 project's README page</a>
               </p>
 
@@ -113,6 +113,16 @@
                     or <a href="http://releases.ubuntu.com/precise/">Ubuntu Precise Pangolin</a>.
 		    If you are running another version, this information may not be accurate.
                   </p>
+
+		  <p>
+		    <b><i>Update:</i></b> For Ubuntu users, the
+		    current package will fail to install unless you
+		    have libjson0 0.10 or higher. An Ubuntu package is
+		    comming soon, but until then you can either use a
+		    backport or install the package manually. If you
+		    are using 12.10 (Quantal) or higher, this will not
+		    affect you.
+		  </p>
 
                   <div id="debian-installation">
                     <h4>Installation</h4>
@@ -135,15 +145,15 @@
                       dpkg to install it.
                     </p>
 
-                    <pre>$ curl -L -O https://github.com/repsheet/backend/releases/download/0.12/repsheet-backend_0.12-1_amd64.deb
-$ sudo dpkg -i repsheet-backend_0.12-1_amd64.deb</pre>
+                    <pre>$ curl -L -O https://github.com/repsheet/backend/releases/download/1.0.0/repsheet-backend_1.0.0-1_amd64.deb
+$ sudo dpkg -i repsheet-backend_1.0.0-1_amd64.deb</pre>
 
                     <p>
 		      Once installed, you can give it a try
                     </p>
 
 		    <pre>$ repsheet -v
-Repsheet Backend Version 0.12
+Repsheet Backend Version 1.0.0
 usage: repsheet [-h] [-p] [-t] [-sbru]
   -h <redis host>
   -p <redis port>
@@ -191,7 +201,7 @@ usage: repsheet [-h] [-p] [-t] [-sbru]
 
                     <pre>$ wget http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 $ sudo rpm -Uvh epel-release-6*.rpm
-$ sudo yum install hiredis redis</pre>
+$ sudo yum install hiredis redis json-c libcurl</pre>
 
                     <p>
                       The redis-server dependency doesn't have to be
@@ -206,15 +216,15 @@ $ sudo yum install hiredis redis</pre>
                       dpkg to install it.
                     </p>
 
-                    <pre>$ curl -L -O https://github.com/repsheet/backend/releases/download/0.12/repsheet_backend-0.12-1.x86_64.rpm
-$ sudo rpm -Uvh repsheet_backend-0.12-1.x86_64.rpm</pre>
+                    <pre>$ curl -L -O https://github.com/repsheet/backend/releases/download/1.0.0/repsheet_backend-1.0.0-1.x86_64.rpm
+$ sudo rpm -Uvh repsheet_backend-1.0.0-1.x86_64.rpm</pre>
 
                     <p>
 		      Once installed, you can give it a try:
                     </p>
 
 		    <pre>$ repsheet -v
-Repsheet Backend Version 0.12
+Repsheet Backend Version 1.0.0
 usage: repsheet [-h] [-p] [-t] [-sbru]
   -h <redis host>
   -p <redis port>
@@ -264,7 +274,7 @@ usage: repsheet [-h] [-p] [-t] [-sbru]
                       First, we need to install some dependencies:
                     </p>
 
-                    <pre>$ sudo pacman -S check redis git
+                    <pre>$ sudo pacman -S check redis git json-c curl
 $ git clone git://github.com/redis/hiredis
 $ cd hiredis
 $ make
@@ -283,13 +293,13 @@ $ sudo make install PREFIX=/usr</pre>
                       dpkg to install it.
                     </p>
 
-                    <pre>$ curl -L -O https://github.com/repsheet/backend/archive/0.12.tar.gz
-$ tar xvzf 0.12.tar.gz
-$ cd backend-0.12
+                    <pre>$ curl -L -O https://github.com/repsheet/backend/archive/1.0.0.tar.gz
+$ tar xvzf 1.0.0.tar.gz
+$ cd backend-1.0.0
 $ ./autogen.sh
 $ ./configure
 $ make
-$ make check
+$ make check # note: this will fail if Redis is not running
 $ sudo make install</pre>
 
                     <p>
@@ -297,7 +307,7 @@ $ sudo make install</pre>
                     </p>
 
 		    <pre>$ repsheet -v
-Repsheet Backend Version 0.12
+Repsheet Backend Version 1.0.0
 usage: repsheet [-h] [-p] [-t] [-sbru]
   -h <redis host>
   -p <redis port>
@@ -315,7 +325,7 @@ usage: repsheet [-h] [-p] [-t] [-sbru]
 		      minute as their schedule.
 		    </p>
 
-		    <pre>* * * * * /usr/bin/repsheet -b -t 50</pre>
+		    <pre>* * * * * /usr/local/bin/repsheet -b -t 50</pre>
 
 		    <p>
 		      This example sets the Repsheet Backend
