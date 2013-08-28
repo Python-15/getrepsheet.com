@@ -135,8 +135,8 @@
                       dpkg to install it.
                     </p>
 
-                    <pre>$ curl -L -O https://github.com/repsheet/repsheet/releases/download/0.9/libapache2-mod-repsheet_0.9-1_amd64.deb
-$ sudo dpkg -i libapache2-mod-repsheet_0.9-1_amd64.deb</pre>
+                    <pre>$ curl -L -O https://github.com/repsheet/repsheet/releases/download/1.0.0/libapache2-mod-repsheet_1.0.0-1_amd64.deb
+$ sudo dpkg -i libapache2-mod-repsheet_1.0.0-1_amd64.deb</pre>
 
                     <p>
                       Finally, enable the module and restart apache:
@@ -152,7 +152,7 @@ $ sudo /etc/init.d/apache restart</pre>
                     </p>
 
                     <pre>$ sudo tail -f /var/log/apache2/error.log
-[Sat Jul 27 15:30:00 2013] [notice] Repsheet Version 0.9 Enabled</pre>
+[Sat Jul 27 15:30:00 2013] [notice] Repsheet Version 1.0.0 Enabled</pre>
 
                     <p>
                       You can verify that ModRepsheet is enabled and
@@ -223,8 +223,8 @@ $ sudo yum install httpd hiredis redis</pre>
                       dpkg to install it.
                     </p>
 
-                    <pre>$ curl -L -O https://github.com/repsheet/repsheet/releases/download/0.9/mod_repsheet-0.9-1.x86_64.rpm
-$ sudo rpm -Uvh mod_repsheet-0.9-1.x86_64.rpm</pre>
+                    <pre>$ curl -L -O https://github.com/repsheet/repsheet/releases/download/1.0.0/mod_repsheet-1.0.0-1.x86_64.rpm
+$ sudo rpm -Uvh mod_repsheet-1.0.0-1.x86_64.rpm</pre>
 
 		    <p>
 		      Next you need to tell Apache to load
@@ -244,7 +244,7 @@ $ sudo rpm -Uvh mod_repsheet-0.9-1.x86_64.rpm</pre>
 		    </p>
 
 		    <pre>$ sudo /usr/sbin/setsebool httpd_can_network_connect=1</pre>
-		    
+
                     <p>
                       Finally, start Redis and Apache:
                     </p>
@@ -259,7 +259,7 @@ $ sudo /etc/init.d/httpd restart</pre>
                     </p>
 
                     <pre>$ sudo tail -f /var/log/httpd/error.log
-[Sat Jul 27 15:30:00 2013] [notice] Repsheet Version 0.9 Enabled</pre>
+[Sat Jul 27 15:30:00 2013] [notice] Repsheet Version 1.0.0 Enabled</pre>
 
                     <p>
                       You can verify that ModRepsheet is enabled and
@@ -334,9 +334,9 @@ $ sudo make install PREFIX=/usr</pre>
                       ModRepsheet.
                     </p>
 
-                    <pre>$ curl -L -O https://github.com/repsheet/repsheet/archive/0.9/0.9.tar.gz
-$ tar xvzf 0.9.tar.gz
-$ cd repsheet-0.9
+                    <pre>$ curl -L -O https://github.com/repsheet/repsheet/archive/1.0.0/1.0.0.tar.gz
+$ tar xvzf 1.0.0.tar.gz
+$ cd repsheet-1.0.0
 $ ./autogen.sh
 $ ./configure
 $ make
@@ -379,7 +379,7 @@ $ sudo systemctl restart httpd</pre>
                     </p>
 
                     <pre>$ sudo tail -f /var/log/httpd/error_log
-[Sat Jul 27 15:30:00 2013] [notice] Repsheet Version 0.9 Enabled</pre>
+[Sat Jul 27 15:30:00 2013] [notice] Repsheet Version 1.0.0 Enabled</pre>
 
                     <p>
                       You can verify that ModRepsheet is enabled and
@@ -410,7 +410,7 @@ $ redis-cli lrange "127.0.0.1:requests" 0 -1
 		    rule. This activity can then be viewed in
 		    the <a href="#">Repsheet Visualizer</a>.
 		  </p>
-		  
+
 		  <p>
 		    To get started, you will need to have
 		    ModSecurity version 2.7 installed. Any version
@@ -424,7 +424,7 @@ $ redis-cli lrange "127.0.0.1:requests" 0 -1
 		    also contain the mechanism that enables
 		    ModRepsheet to work.
 		  </p>
-		  
+
 		  <p>
 		    You can use any subset of the ModSecurity Core
 		    Rule Set. In order for Repsheet to work however,
@@ -439,7 +439,7 @@ $ redis-cli lrange "127.0.0.1:requests" 0 -1
 		    cumbersome and at times yield a high rate of
 		    false positives, so tuning is likely required.
 		  </p>
-		  
+
 		  <p>
 		    In order to ensure that ModRepsheet can
 		    successfully read from ModSecurity, we can issue
