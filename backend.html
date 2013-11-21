@@ -145,41 +145,43 @@
                       dpkg to install it.
                     </p>
 
-                    <pre>$ curl -L -O https://github.com/repsheet/backend/releases/download/1.5.0/repsheet-backend_1.5.0-1_amd64.deb
-$ sudo dpkg -i repsheet-backend_1.5.0-1_amd64.deb</pre>
+                    <pre>$ curl -L -O https://github.com/repsheet/backend/releases/download/2.0.0/repsheet-backend_2.0.0-1_amd64.deb
+$ sudo dpkg -i repsheet-backend_2.0.0-1_amd64.deb</pre>
 
                     <p>
 		      Once installed, you can give it a try
                     </p>
 
 		    <pre>$ repsheet -v
-Repsheet Backend Version 1.5.0
-usage: repsheet [-h] [-p] [-t] [-o] [-sbru]
-  --host                   -h &lt;redis host&gt;
-  --port                   -p &lt;redis port&gt;
-  --modsecurity_threshold  -t &lt;blacklist threshold&gt;
-  --ofdp_threshold         -o &lt;ofdp threshold&gt; score and blacklist actors against wafsec.com
+Repsheet Backend Version 2.0.0
+usage: repsheet [-srauv] [-h] [-p] [-e] [-t] [-o]
   --score                  -s score actors
   --report                 -r report top 10 offenders
-  --blacklist              -b blacklist ModSecurity offenders
-  --upstream               -u publish blacklist upstream to Cloudflare
+  --analyze                -a analyze and act on offenders
+  --publish                -u publish blacklist to upstream providers
+  --host                   -h &lt;redis host&gt;
+  --port                   -p &lt;redis port&gt;
+  --expiry                 -e &lt;redis expiry&gt; blacklist expire time
+  --modsecurity_threshold  -t &lt;blacklist threshold&gt;
+  --ofdp_threshold         -o &lt;ofdp threshold&gt; score and blacklist actors against wafsec.com
   --version                -v print version and help</pre>
 
 		    <p>
 		      In order to use the Repsheet Backend
 		      effectively, you should schedule it to run
-		      periodically and automatically blacklist repeat
+		      periodically and automatically analyze
 		      offenders. Most installations use once per
 		      minute as their schedule.
 		    </p>
 
-		    <pre>* * * * * /usr/bin/repsheet -b -t 50</pre>
+		    <pre>* * * * * /usr/bin/repsheet --analyze --modsecurity_threshold 75 --ofdp_threshold 20</pre>
 
 		    <p>
-		      This example sets the Repsheet Backend
-		      to run every minute and blacklist any offenders
-		      that have triggered 50 or more ModSecurity
-		      rules.
+		      This example sets the Repsheet Backend to
+		      analyze offenders every minute and blacklist any
+		      offenders that have triggered 75 or more
+		      ModSecurity rules, have an OFDP risk score of 20
+		      or higher, or are a returning offender.
 		    </p>
                   </div>
                 </div>
@@ -218,24 +220,25 @@ $ sudo yum install hiredis redis json-c libcurl</pre>
                       dpkg to install it.
                     </p>
 
-                    <pre>$ curl -L -O https://github.com/repsheet/backend/releases/download/1.2.0/repsheet_backend-1.5.0-1.x86_64.rpm
-$ sudo rpm -Uvh repsheet_backend-1.5.0-1.x86_64.rpm</pre>
+                    <pre>$ curl -L -O https://github.com/repsheet/backend/releases/download/2.0.0/repsheet_backend-2.0.0-1.x86_64.rpm
+$ sudo rpm -Uvh repsheet_backend-2.0.0-1.x86_64.rpm</pre>
 
                     <p>
 		      Once installed, you can give it a try:
                     </p>
 
 		    <pre>$ repsheet -v
-Repsheet Backend Version 1.5.0
-usage: repsheet [-h] [-p] [-t] [-o] [-sbru]
-  --host                   -h &lt;redis host&gt;
-  --port                   -p &lt;redis port&gt;
-  --modsecurity_threshold  -t &lt;blacklist threshold&gt;
-  --ofdp_threshold         -o &lt;ofdp threshold&gt; score and blacklist actors against wafsec.com
+Repsheet Backend Version 2.0.0
+usage: repsheet [-srauv] [-h] [-p] [-e] [-t] [-o]
   --score                  -s score actors
   --report                 -r report top 10 offenders
-  --blacklist              -b blacklist ModSecurity offenders
-  --upstream               -u publish blacklist upstream to Cloudflare
+  --analyze                -a analyze and act on offenders
+  --publish                -u publish blacklist to upstream providers
+  --host                   -h &lt;redis host&gt;
+  --port                   -p &lt;redis port&gt;
+  --expiry                 -e &lt;redis expiry&gt; blacklist expire time
+  --modsecurity_threshold  -t &lt;blacklist threshold&gt;
+  --ofdp_threshold         -o &lt;ofdp threshold&gt; score and blacklist actors against wafsec.com
   --version                -v print version and help</pre>
 
 		    <p>
@@ -246,13 +249,14 @@ usage: repsheet [-h] [-p] [-t] [-o] [-sbru]
 		      minute as their schedule.
 		    </p>
 
-		    <pre>* * * * * /usr/bin/repsheet -b -t 50</pre>
+		    <pre>* * * * * /usr/bin/repsheet --analyze --modsecurity_threshold 75 --ofdp_threshold 20</pre>
 
 		    <p>
-		      This example sets the Repsheet Backend
-		      to run every minute and blacklist any offenders
-		      that have triggered 50 or more ModSecurity
-		      rules.
+		      This example sets the Repsheet Backend to
+		      analyze offenders every minute and blacklist any
+		      offenders that have triggered 75 or more
+		      ModSecurity rules, have an OFDP risk score of 20
+		      or higher, or are a returning offender.
 		    </p>
                   </div>
                 </div>
@@ -297,9 +301,9 @@ $ sudo make install PREFIX=/usr</pre>
                       dpkg to install it.
                     </p>
 
-                    <pre>$ curl -L -O https://github.com/repsheet/backend/archive/1.5.0.tar.gz
-$ tar xvzf 1.5.0.tar.gz
-$ cd backend-1.5.0
+                    <pre>$ curl -L -O https://github.com/repsheet/backend/archive/2.0.0.tar.gz
+$ tar xvzf 2.0.0.tar.gz
+$ cd backend-2.0.0
 $ ./autogen.sh
 $ ./configure
 $ make
@@ -311,16 +315,17 @@ $ sudo make install</pre>
                     </p>
 
 		    <pre>$ repsheet -v
-Repsheet Backend Version 1.5.0
-usage: repsheet [-h] [-p] [-t] [-o] [-sbru]
-  --host                   -h &lt;redis host&gt;
-  --port                   -p &lt;redis port&gt;
-  --modsecurity_threshold  -t &lt;blacklist threshold&gt;
-  --ofdp_threshold         -o &lt;ofdp threshold&gt; score and blacklist actors against wafsec.com
+Repsheet Backend Version 2.0.0
+usage: repsheet [-srauv] [-h] [-p] [-e] [-t] [-o]
   --score                  -s score actors
   --report                 -r report top 10 offenders
-  --blacklist              -b blacklist ModSecurity offenders
-  --upstream               -u publish blacklist upstream to Cloudflare
+  --analyze                -a analyze and act on offenders
+  --publish                -u publish blacklist to upstream providers
+  --host                   -h &lt;redis host&gt;
+  --port                   -p &lt;redis port&gt;
+  --expiry                 -e &lt;redis expiry&gt; blacklist expire time
+  --modsecurity_threshold  -t &lt;blacklist threshold&gt;
+  --ofdp_threshold         -o &lt;ofdp threshold&gt; score and blacklist actors against wafsec.com
   --version                -v print version and help</pre>
 
 		    <p>
@@ -331,13 +336,14 @@ usage: repsheet [-h] [-p] [-t] [-o] [-sbru]
 		      minute as their schedule.
 		    </p>
 
-		    <pre>* * * * * /usr/local/bin/repsheet -b -t 50</pre>
+		    <pre>* * * * * /usr/bin/repsheet --analyze --modsecurity_threshold 75 --ofdp_threshold 20</pre>
 
 		    <p>
-		      This example sets the Repsheet Backend
-		      to run every minute and blacklist any offenders
-		      that have triggered 50 or more ModSecurity
-		      rules.
+		      This example sets the Repsheet Backend to
+		      analyze offenders every minute and blacklist any
+		      offenders that have triggered 75 or more
+		      ModSecurity rules, have an OFDP risk score of 20
+		      or higher, or are a returning offender.
 		    </p>
 		  </div>
 		</div>
