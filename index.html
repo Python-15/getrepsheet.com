@@ -161,31 +161,29 @@
                 <i class="icon-embed-close"></i>
               </div>
               <div class="text">
-                <h3>ModRepsheet</h3>
+                <h3>WebServer Module</h3>
                 <p>
                   This is the main engine for Repsheet. It embeds
                   itself inside of your web server and records
                   activity of actors on your application. It also
-                  provides the ability to block offensive actors.
+                  provides the ability to block offensive
+                  actors. Available for Apache and NGINX.
                 </p>
-
-		<a href="mod_repsheet.html">Learn More</a>
               </div>
             </div>
 
             <div class="one-third column highlight-item">
               <div class="icon">
-                <i class="icon-bell"></i>
+                <i class="icon-spade"></i>
               </div>
               <div class="text">
-                <h3>Repsheet Backend</h3>
+                <h3>librepsheet</h3>
                 <p>
-                  This is the brains behind Repsheet. It scores actors
-                  and works to detect bad activity and help you block
-                  offensive actors.
+		  The core library for Repsheet. Shared by all C based
+		  Repsheet projects, this library provides the
+		  abstraction on top of Redis as well as the
+		  additional processing logic.
                 </p>
-
-		<a href="backend.html">Learn More</a>
               </div>
             </div>
 
@@ -220,7 +218,10 @@
 
             <div class="our-clients">
               <div class="client">
-                <a href="https://www.braintreepayments.com"><img src="assets/img/Braintree.png" alt=""></a>
+                <a href="https://www.braintreepayments.com"><img src="assets/img/Braintree.png" alt="Braintree"></a>
+              </div>
+              <div class="client">
+                <a href="https://www.groupon.com"><img src="assets/img/Groupon_logo.png" alt="Groupon"></a>
               </div>
             </div>
           </div>
@@ -235,11 +236,7 @@
               <h3>About</h3>
               <p>
                 Repsheet was designed and implemented
-                by <a href="https://github.com/abedra">Aaron
-                  Bedra</a>. The development efforts have been made
-                possible in part
-                by <a href="https://braintreepayments.com">Braintree
-                  Payments</a>.
+                by <a href="https://github.com/abedra">Aaron Bedra</a>.
               </p>
             </div>
           </div>
@@ -248,7 +245,7 @@
         <div id="footer-bottom">
           <div class="container">
             <div class="eight columns">
-              Copyright &copy; Aaron Bedra 2013. All Rights Reserved.
+              Copyright &copy; Aaron Bedra 2013-2014. All Rights Reserved.
             </div>
             <div class="eight columns">
               <ul class="footer-nav">
